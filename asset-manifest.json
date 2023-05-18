@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/spellcaster-tracker/static/css/main.923b812f.css",
+    "main.js": "/spellcaster-tracker/static/js/main.6fb65138.js",
+    "static/js/787.604f335e.chunk.js": "/spellcaster-tracker/static/js/787.604f335e.chunk.js",
+    "index.html": "/spellcaster-tracker/index.html",
+    "main.923b812f.css.map": "/spellcaster-tracker/static/css/main.923b812f.css.map",
+    "main.6fb65138.js.map": "/spellcaster-tracker/static/js/main.6fb65138.js.map",
+    "787.604f335e.chunk.js.map": "/spellcaster-tracker/static/js/787.604f335e.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.923b812f.css",
+    "static/js/main.6fb65138.js"
+  ]
+}
