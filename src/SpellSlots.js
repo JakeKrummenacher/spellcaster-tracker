@@ -103,6 +103,13 @@ const SpellSlots = ({ type, level, onDelete }) => {
         setIsAddSpellModalOpen(false);
     };
     
+    const handleModalClose = (event) => {
+      event.preventDefault();
+      setIsEditMode(false);
+      setIsNamingModalOpen(false);
+      setIsAddSpellModalOpen(false);
+    }
+    
 
   return (
     <div className="spell-slots">
@@ -118,7 +125,7 @@ const SpellSlots = ({ type, level, onDelete }) => {
         </div>
       {isNamingModalOpen && (
         <div className="modal">
-            <button className="modal-close" onClick={onDelete}>X</button>
+            <button className="modal-close" onClick={event => handleModalClose(event)}>X</button>
             <form className="mdc-dialog__container" onSubmit={event => handleNameSubmit(event)}>
             {focusedSpellNames.map((levelNames, levelIndex) => (
                 <div key={levelIndex} className="mdc-dialog__surface">
