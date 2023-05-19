@@ -8,7 +8,7 @@ const SpellSlots = ({ type, level, onDelete }) => {
     const [focusedSpellNames, setFocusedSpellNames] = useState([]);
     const [isNamingModalOpen, setIsNamingModalOpen] = useState(false);
     const [isAddSpellModalOpen, setIsAddSpellModalOpen] = useState(false);
-    const [newSpellDetails, setNewSpellDetails] = useState({ levelIndex: null, name: '' });
+    const [newSpellDetails, setNewSpellDetails] = useState({ levelIndex: null, name: '', used: false, originalIndex: 0 });
     const [isEditMode, setIsEditMode] = useState(false);
 
   useEffect(() => {
@@ -34,7 +34,7 @@ const SpellSlots = ({ type, level, onDelete }) => {
       if (type === "Spontaneous") {
         newSlots =  spontaneousPattern[level-1].map(slotLevel => new Array(slotLevel).fill(false));
       } else if (type === "Focused") {
-        newSlots = focusedPattern[level - 1].map(slotLevel => Array.from({ length: slotLevel }, () => ({ name: '', used: false })));
+        newSlots = focusedPattern[level - 1].map(slotLevel => Array.from({ length: slotLevel }, (_, originalIndex) => ({ name: '', used: false, originalIndex })));
         setFocusedSpellNames(newSlots);
         setIsNamingModalOpen(true);
       }
@@ -82,26 +82,24 @@ const SpellSlots = ({ type, level, onDelete }) => {
     });
   };
   
-
-
     const addSpellSlot = (levelIndex) => {
-        setNewSpellDetails({ levelIndex, name: '' });
+        setNewSpellDetails({ levelIndex, name: '', used: false, originalIndex: slots[levelIndex].length });
         setIsAddSpellModalOpen(true);
     };
 
     const handleNewSpellNameChange = (event) => {
-        setNewSpellDetails(prevDetails => ({ ...prevDetails, name: event.target.value }));
+        setNewSpellDetails(prevDetails => ({ ...prevDetails, name: event.target.value, used: false }));
     };
 
     const handleNewSpellSubmit = (event) => {
         event.preventDefault();
-
+    
         setFocusedSpellNames(prevNames => {
             const newNames = [...prevNames];
-            newNames[newSpellDetails.levelIndex] = [...prevNames[newSpellDetails.levelIndex], { name: newSpellDetails.name, used: false }];
+            newNames[newSpellDetails.levelIndex] = [...prevNames[newSpellDetails.levelIndex], { name: newSpellDetails.name, used: false, originalIndex: prevNames[newSpellDetails.levelIndex].length }];
             return newNames;
         });
-
+    
         setIsAddSpellModalOpen(false);
     };
     
@@ -192,7 +190,7 @@ const SpellSlots = ({ type, level, onDelete }) => {
                         {slots.map((spell, slotIndex) => (
                             <button 
                                 key={slotIndex} 
-                                onClick={() => handleSpellClick(levelIndex, slotIndex)}
+                                onClick={() => handleSpellClick(levelIndex, spell.originalIndex)}
                                 className={`mdc-button mdc-button--raised ${spell.used ? 'spell-used' : ''}`}
                             >
                                 {spell.name}
