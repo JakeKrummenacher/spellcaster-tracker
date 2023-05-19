@@ -109,7 +109,6 @@ const SpellSlots = ({ type, level, onDelete }) => {
                         value={name.name}
                         onChange={(event) => handleNameChange(levelIndex, slotIndex, event)}
                         placeholder="Spell Name"
-                        required
                         />
                     <div className="mdc-line-ripple"></div>
                     </div>
@@ -153,23 +152,33 @@ const SpellSlots = ({ type, level, onDelete }) => {
             ))}
       </div>
       ))}
-         {type === "Focused" && focusedSpellNames.map((levelNames, levelIndex) => (
-            <div key={levelIndex} className="level mdc-card">
-                <h4 className="mdc-typography--headline5">Level {levelIndex + 1}</h4>
-                <div style={{display: "flex", alignItems: "center"}}>
-                    {levelNames.map((spell, slotIndex) => (
-                        <button 
-                            key={slotIndex} 
-                            onClick={() => handleSpellClick(levelIndex, slotIndex)}
-                            className={`mdc-button mdc-button--raised ${spell.used ? 'spell-used' : ''}`}
-                        >
-                            {spell.name}
-                        </button>
-                    ))}
-                    <button className='add-spell-button' onClick={() => addSpellSlot(levelIndex)}><AddCircleOutlineRoundedIcon /></button>
-                </div>
-            </div>      
-        ))}
+        {type === "Focused" && focusedSpellNames
+            .map((levelNames, levelIndex) => (
+                {
+                    levelIndex,
+                    slots: levelNames.filter(spell => spell.name)
+                }
+            ))
+            .filter(level => level.slots.length > 0)
+            .map(({levelIndex, slots}) => (
+                <div key={levelIndex} className="level mdc-card">
+                    <h4 className="mdc-typography--headline5">Level {levelIndex + 1}</h4>
+                    <div style={{display: "flex", alignItems: "center"}}>
+                        {slots.map((spell, slotIndex) => (
+                            <button 
+                                key={slotIndex} 
+                                onClick={() => handleSpellClick(levelIndex, slotIndex)}
+                                className={`mdc-button mdc-button--raised ${spell.used ? 'spell-used' : ''}`}
+                            >
+                                {spell.name}
+                            </button>
+                        ))}
+                        <button className='add-spell-button' onClick={() => addSpellSlot(levelIndex)}><AddCircleOutlineRoundedIcon /></button>
+                    </div>
+                </div>      
+            ))
+}
+
     </div>
   );
 }
