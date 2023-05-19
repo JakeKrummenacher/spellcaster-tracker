@@ -31,7 +31,7 @@ const Spellcaster = ({ name, type, level, focusedSlots, onDelete, onEdit }) => {
       <div className="spellcaster">
         <h2>{name}</h2>
         <p>Type: {type}</p>
-        <SpellSlots type={type} level={level} />
+        <SpellSlots type={type} level={level} onDelete={onDelete} />
         {focusedSlots !== null &&(
             <div className="slot">
                 <h4>Focused Spells</h4>

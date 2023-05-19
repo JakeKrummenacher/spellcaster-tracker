@@ -63,8 +63,14 @@ const App = () => {
         Add Spellcaster
       </button>
       {modalOpen && (
-        <div className="modal">
-          <div className="modal-content">
+        <div
+        className="modal"
+        onClick={closeModal}
+        >
+          <div
+          className="modal-content"
+          onClick={e => e.stopPropagation()}
+          >
             <h2 className="modal-title">{editMode ? 'Edit Spellcaster' : 'Add a new Spellcaster'}</h2>
             <form onSubmit={handleSubmit} className='modal-content'>
               <label>
