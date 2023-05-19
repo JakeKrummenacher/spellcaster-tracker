@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import SpellSlots from './SpellSlots';
 import { IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete'
-import EditIcon from '@mui/icons-material/Edit'
 
 const Spellcaster = ({ name, type, level, focusedSlots, onDelete, onEdit }) => {
     const [slot, setSlot] = useState([]);
@@ -46,10 +45,7 @@ const Spellcaster = ({ name, type, level, focusedSlots, onDelete, onEdit }) => {
         )}
         <div class="button-container">
             <IconButton aria-label="delete" onClick={onDelete}>
-            <DeleteIcon />
-            </IconButton>
-            <IconButton aria-label="edit" onClick={onEdit}>
-            <EditIcon />
+                <DeleteIcon />
             </IconButton>
         </div>
       </div>

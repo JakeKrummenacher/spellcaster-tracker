@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
+import { IconButton } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit'
 
 const SpellSlots = ({ type, level, onDelete }) => {
     const [slots, setSlots] = useState([]);
@@ -7,7 +9,7 @@ const SpellSlots = ({ type, level, onDelete }) => {
     const [isNamingModalOpen, setIsNamingModalOpen] = useState(false);
     const [isAddSpellModalOpen, setIsAddSpellModalOpen] = useState(false);
     const [newSpellDetails, setNewSpellDetails] = useState({ levelIndex: null, name: '' });
-
+    const [isEditMode, setIsEditMode] = useState(false);
 
   useEffect(() => {
     let newSlots;
@@ -57,18 +59,30 @@ const SpellSlots = ({ type, level, onDelete }) => {
     });
   };
 
-  const handleNameSubmit = () => {
-    setIsNamingModalOpen(false);
+  const handleNameSubmit = (event) => {
+    event.preventDefault();
+    
+    if (isEditMode) {
+        setIsEditMode(false); // Exit edit mode
+    } else {
+        setIsNamingModalOpen(false); // Close the modal if it's not an edit
+    }
   };
+  
 
   const handleSpellClick = (levelIndex, slotIndex) => {
+    console.log('Clicked on a spell!');
     setFocusedSpellNames(prevNames => {
       const newNames = [...prevNames];
       newNames[levelIndex] = [...prevNames[levelIndex]];
-      newNames[levelIndex][slotIndex].used = true;
+      const spell = newNames[levelIndex][slotIndex];
+      newNames[levelIndex][slotIndex] = { ...spell, used: !spell.used };
+      console.log('Updated spell names:', newNames);
       return newNames;
     });
   };
+  
+
 
     const addSpellSlot = (levelIndex) => {
         setNewSpellDetails({ levelIndex, name: '' });
@@ -90,13 +104,24 @@ const SpellSlots = ({ type, level, onDelete }) => {
 
         setIsAddSpellModalOpen(false);
     };
+    
 
   return (
     <div className="spell-slots">
+        <div class="button-container">
+            {type === "Focused" && (
+                <IconButton aria-label="edit" onClick={()=>{
+                    setIsEditMode(true);
+                    setIsNamingModalOpen(true);
+                    }}>
+                <EditIcon />
+                </IconButton>
+            )}
+        </div>
       {isNamingModalOpen && (
         <div className="modal">
             <button className="modal-close" onClick={onDelete}>X</button>
-            <form className="mdc-dialog__container" onSubmit={handleNameSubmit}>
+            <form className="mdc-dialog__container" onSubmit={event => handleNameSubmit(event)}>
             {focusedSpellNames.map((levelNames, levelIndex) => (
                 <div key={levelIndex} className="mdc-dialog__surface">
                     <h4 className="mdc-dialog__title">Level {levelIndex + 1}</h4>
@@ -122,7 +147,7 @@ const SpellSlots = ({ type, level, onDelete }) => {
         {isAddSpellModalOpen && (
             <div className="modal">
                 <button className="modal-close" onClick={() => setIsAddSpellModalOpen(false)}>X</button>
-                <form className="mdc-dialog__container" onSubmit={handleNewSpellSubmit}>
+                <form className="mdc-dialog__container" onSubmit={event => handleNewSpellSubmit(event)}>
                     <div className="mdc-dialog__surface">
                         <h4 className="mdc-dialog__title">Add New Spell</h4>
                         <div className="mdc-text-field">
@@ -177,8 +202,7 @@ const SpellSlots = ({ type, level, onDelete }) => {
                     </div>
                 </div>      
             ))
-}
-
+        }
     </div>
   );
 }
